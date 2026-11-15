@@ -1,0 +1,42 @@
+@model QuizViewModel
+@{
+    ViewData["Title"] = "Answer key";
+}
+
+<section class="intro">
+    <h1>@Model.Title</h1>
+    <p>@Model.Subtitle</p>
+    <label class="toggle">
+        <input type="checkbox" id="showAnswers" checked />
+        Show answers
+    </label>
+</section>
+
+<ol class="questions">
+    @foreach (var q in Model.Questions)
+    {
+        <li class="question" id="q@(q.Number)">
+            <h2>@q.Text</h2>
+            <ul class="options">
+                @foreach (var opt in q.Options)
+                {
+                    var isCorrect = opt.Key == q.CorrectKey;
+                    <li class="option @(isCorrect ? "correct" : "")">
+                        <span class="key">@(opt.Key))</span>
+                        <span>@opt.Value</span>
+                    </li>
+                }
+            </ul>
+            <p class="answer">
+                <strong>Answer: @(q.CorrectKey).</strong> @q.Explanation
+            </p>
+        </li>
+    }
+</ol>
+
+<script>
+    const toggle = document.getElementById('showAnswers');
+    const apply = () => document.body.classList.toggle('hide-answers', !toggle.checked);
+    toggle.addEventListener('change', apply);
+    apply();
+</script>
